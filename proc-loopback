@@ -1,0 +1,13 @@
+tclsh
+!
+proc loopback {loop max} {
+  ios_config "no interface loopback $loop"
+  ios_config "interface loopback $loop" "ip address 10.0.$loop.0 255.255.255.255"
+  for {set n 1} {$n<=$max} {incr n 1} {
+    ios_config "interface loopback $loop" "ip address 10.0.$loop.$n 255.255.255.255 secondary"
+  }
+}
+!
+loopback 2 255
+!
+tclquit
