@@ -1,0 +1,21 @@
+tclsh
+!
+puts [open "nvram:startup-config" w+] {
+ip routing
+no ip domain lookup
+ip access-list standard ACL_AllZeroes
+ permit 0.0.0.0
+route-map RM_NextHopZeroes permit 10
+ match ip next-hop ACL_AllZeroes
+alias exec ib show ip bgp
+alias exec ibl show ip bgp route-map RM_NextHopZeroes | begin Network
+alias exec iblf show ip bgp route-map RM_NextHopZeroes
+alias exec ibs show ip bgp summary | begin ^Neighbor
+alias exec ibsf show ip bgp summary
+line con 0
+ privi l 15
+ exec-ti 0
+ transport preferred none
+}
+!
+tclquit
