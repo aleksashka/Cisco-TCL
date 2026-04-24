@@ -1,0 +1,11 @@
+tclsh
+!
+proc scanping {subnet min max} {
+  for {set n $min} {$n<=$max} {incr n 1} {
+    exec "ping $subnet$n repeat 1 timeout 0"
+  }
+}
+!
+scanping 1 254
+!
+tclquit
