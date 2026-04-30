@@ -1,21 +1,62 @@
 tclsh
 !
 puts [open "nvram:startup-config" w+] {
-ip routing
-no ip domain lookup
+service tcp-keepalives-in
+service tcp-keepalives-out
+service timestamps debug datetime msec localtime show-timezone year
+service timestamps log datetime msec localtime show-timezone year
+!
+hostname YOUR_HOSTNAME
+clock timezone Regina -6 0
+!
+no ip source-route
+no ip icmp rate-limit unreachable
+no ip domain-lookup
+ip cef
+no ipv6 source-route
+!
+no ip http server
+no ip http secure-server
+!
 ip access-list standard ACL_AllZeroes
  permit 0.0.0.0
+!
 route-map RM_NextHopZeroes permit 10
  match ip next-hop ACL_AllZeroes
+!
+alias exec i show ip interface brief | exclude unassigned
+alias exec if show ip interface brief
+!
+alias exec ir show ip route | begin ^Gateway
+alias exec irf show ip route
+alias exec iro show ip route ospf | begin ^Gateway
+alias exec irof show ip route ospf
+alias exec ire show ip route eigrp | begin ^Gateway
+alias exec iref show ip route eigrp
+alias exec irb show ip route bgp | begin ^Gateway
+alias exec irbf show ip route bgp
+!
 alias exec ib show ip bgp
 alias exec ibl show ip bgp route-map RM_NextHopZeroes | begin Network
 alias exec iblf show ip bgp route-map RM_NextHopZeroes
 alias exec ibs show ip bgp summary | begin ^Neighbor
 alias exec ibsf show ip bgp summary
+!
+alias exec is show interface status
+!
+alias exec diff show archive config differences nvram:startup-config
+!
+alias exec top show processes cpu sorted 5sec | exclude _0.00%  0.00%  0.00%
+alias exec top5s show processes cpu sorted 5sec | exclude _0.00%  0.00%  0.00%
+alias exec top1m show processes cpu sorted 1min | exclude _0.00%  0.00%  0.00%
+alias exec top5m show processes cpu sorted 5min | exclude _0.00%  0.00%  0.00%
+!
 line con 0
- privi l 15
- exec-ti 0
+ exec-timeout 0 0
+ privilege level 15
+ logging synchronous
  transport preferred none
+end
 }
 !
 tclquit
