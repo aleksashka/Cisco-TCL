@@ -29,6 +29,8 @@ alias exec if show ip interface brief
 !
 alias exec ir show ip route | begin ^Gateway
 alias exec irf show ip route
+alias exec irs show ip route static | begin ^Gateway
+alias exec irsf show ip route static
 alias exec iro show ip route ospf | begin ^Gateway
 alias exec irof show ip route ospf
 alias exec ire show ip route eigrp | begin ^Gateway
