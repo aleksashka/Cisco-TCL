@@ -46,7 +46,7 @@ alias exec ibsf show ip bgp summary
 !
 alias exec is show interface status
 !
-alias exec dif show archive config differences nvram:startup-config system:running-config | section exclude crypto pki certificate chain
+alias exec dif show archive config differences nvram:startup-config system:running-config | section exclude ^crypto pki certificate chain
 alias exec diff show archive config differences nvram:startup-config system:running-config
 !
 alias exec top show processes cpu sorted 5sec | exclude _0.00%  0.00%  0.00%
